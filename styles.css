@@ -1,7 +1,45 @@
+@font-face {
+  font-family: star-jedi;
+  src: url("./Starjedi.ttf");
+}
+
+@font-face {
+  font-family: roboto;
+  src: url("./Roboto-Regular.ttf");
+}
+
+body {
+  font-family: roboto;
+  background-color: #252525;
+  color: #c0bfbf;
+}
+
+body::-webkit-scrollbar {
+  width: 1em;
+}
+ 
+body::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+ 
+body::-webkit-scrollbar-thumb {
+  background-color: #7d652ab6;
+  outline: 1px solid rgb(62, 73, 83);
+}
+
+img {
+  width: 200px;
+  margin-top: 22px;
+}
+
 .title-container {
   text-align: center;
   width: 510px;
-  margin-top: 1rem;
+}
+
+.title-container h1 {
+  font-family: star-jedi;
+  color: #c79c2e;
 }
 
 .letter-yellow {
@@ -33,6 +71,7 @@
 }
 
 .tile-column {
+  font-family: star-jedi;
   background-color: #f4f3f1;
   color: #252525;
   height: 40px;
@@ -53,15 +92,14 @@
   border: 1px solid #252525;
 }
 
-
 .wrong {
-    background-color: #943e3c;
-    color: #f4f3f1;
+  background-color: #943e3c;
+  color: #f4f3f1;
 }
 
 .displaced {
-    background-color: #c79c2e;
-    color: #f4f3f1;
+  background-color: #c79c2e;
+  color: #f4f3f1;
 }
 
 .right {
@@ -86,6 +124,36 @@
 #tips-list {
   list-style-position: inside;
   text-align: center;
+  padding: 0;
+}
+
+#tips-list li {
+  margin-bottom: 15px;
+  font-size: 15px;
+ }
+
+.question-mark {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin-top: -20px;
+  margin-right: -15px;
+  background-color: #252525;
+  border: 3px solid #c79c2e;
+  color: #c79c2e;
+  width: 45px;
+  font-size: 30px;
+  font-family: star-jedi;
+  border-radius: 50%;
+}
+
+.tips-container {
+  position: relative;
+  background-color: #c79c2e;
+  color: #252525;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 20px;
 }
 
 .capitalize-text {
@@ -93,12 +161,13 @@
 }
 
 .enter-button {
-  width: 60px;
+  width: 80px;
   height: 40px;
   margin: 5px;
 }
 .backspace-button {
   height: 40px;
+  width: 80px;
 }
 
 .keyboard-row-container:not(.notAlphabetic) button {
@@ -106,7 +175,16 @@
   height: 40px;
   border-radius: 0.25rem;
   margin-right: 0.25rem;
-  border: 1px solid #252525;
-  font-size: 16px;
+
+  font-size: 20px;
   cursor: pointer;
+}
+
+button {
+  font-family: star-jedi;
+  background-color: #413e3e;
+  border: 1px solid #252525;
+  cursor: pointer;
+  color: #c79c2e;
+  font-size: 16px;
 }

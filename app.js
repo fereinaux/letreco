@@ -23,7 +23,7 @@ $.get(`https://significado.herokuapp.com/v2/sinonimos/${letreco}`, function (dat
 })
 const rows = 6;
 const columns = letreco.length;
-$("#tips-list").append(`<li>A palavra tem ${letreco.length} letras</li>`)
+$("#tips-list").append(`<li>A palavra tem <strong>${letreco.length} letras</strong></li>`)
 let currentRow = 0;
 let currentColumn = 0;
 const guesses = [];
@@ -78,19 +78,19 @@ const checkGuess = () => {
     } else {
       switch (currentRow) {
         case 0:
-          $("#tips-list").append(`<li class="capitalize-text">${meanings[0].partOfSpeech}</li>`)
+          $("#tips-list").append(`<li class="capitalize-text"><strong>${meanings[0].partOfSpeech}</strong></li>`)
 
           break;
         case 1:
-          $("#tips-list").append(`<li>Sinônimo: ${synonyms[0]}</li>`)
+          $("#tips-list").append(`<li><strong>Sinônimo</strong>: ${synonyms[0]}</li>`)
 
           break;
         case 2:
-          $("#tips-list").append(`<li>Frase: ${sentences[0].sentence.replace(new RegExp(letreco, "gi"), "?")}</li>`)
+          $("#tips-list").append(`<li><strong>Frase</strong>: ${sentences[0].sentence.replace(new RegExp(letreco, "gi"), "?")}</li>`)
 
           break;
         case 3:
-          $("#tips-list").append(`<li>Significado: ${meanings[0].meanings[0]}</li>`)
+          $("#tips-list").append(`<li><strong>Significado</strong>: ${meanings[0].meanings[0]}</li>`)
 
         default:
           break;
@@ -125,7 +125,7 @@ const handleKeyboardOnClick = (key) => {
   const currentTile = document.querySelector(
     "#row" + currentRow + "column" + currentColumn
   );
-  currentTile.textContent = key;
+  currentTile.textContent = key.toLowerCase();
   guesses[currentRow][currentColumn] = key;
   currentColumn++;
 };
@@ -133,7 +133,7 @@ const handleKeyboardOnClick = (key) => {
 const createKeyboardRow = (keys, keyboardRow) => {
   keys.forEach((key) => {
     var buttonElement = document.createElement("button");
-    buttonElement.textContent = key;
+    buttonElement.textContent = key.toLowerCase();
     buttonElement.setAttribute("id", key);
     buttonElement.addEventListener("click", () => handleKeyboardOnClick(key));
     keyboardRow.append(buttonElement);
@@ -157,20 +157,20 @@ const handleBackspace = () => {
 
 const backspaceButton = document.createElement("button");
 backspaceButton.addEventListener("click", handleBackspace);
-backspaceButton.textContent = "<";
+backspaceButton.textContent = "delete";
 backspaceButton.classList.add("backspace-button")
 backspaceAndEnterRow.append(backspaceButton);
 
 const enterButton = document.createElement("button");
 enterButton.addEventListener("click", checkGuess);
-enterButton.textContent = "ENTER";
+enterButton.textContent = "enter";
 enterButton.classList.add("enter-button")
 backspaceAndEnterRow.append(enterButton);
 
 document.onkeydown = function (evt) {
   evt = evt || window.evt
   if (evt.key === "Enter") {
-    $.get(`https://significado.herokuapp.com/v2/${guesses[currentRow].join("")}`, function () {
+    $.get(`https://significado.herokuapp.com/v2/${guesses[currentRow].join("").toLowerCase()}`, function () {
       checkGuess();
     })
 
