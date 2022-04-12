@@ -8,12 +8,26 @@ const keysFirstRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
 const keysSecondRow = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
 const keysThirdRow = ["Z", "X", "C", "V", "B", "N", "M"];
 
+let letreco = "PEGAR";
+let sentences = [];
+let synonyms = [];
+let meanings = []
+$.get(`https://significado.herokuapp.com/v2/frases/${letreco}`, function (data) {
+  sentences = data;
+})
+$.get(`https://significado.herokuapp.com/v2/${letreco}`, function (data) {
+  meanings = data;
+})
+$.get(`https://significado.herokuapp.com/v2/sinonimos/${letreco}`, function (data) {
+  synonyms = data;
+})
 const rows = 6;
-const columns = 5;
+const columns = letreco.length;
+$("#tips-list").append(`<li>A palavra tem ${letreco.length} letras</li>`)
 let currentRow = 0;
 let currentColumn = 0;
-let letreco = "TESTE";
 const guesses = [];
+const tips = [];
 
 for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
   guesses[rowIndex] = new Array(columns);
@@ -38,17 +52,22 @@ const checkGuess = () => {
   if (guess.length !== columns) {
     return;
   }
+
+
   let letrecoLocal = [...letreco]
   var currentColumns = document.querySelectorAll(".typing");
   for (let index = 0; index < columns; index++) {
     const letter = guess[index];
     if (letrecoLocal.indexOf(letter) < 0) {
       currentColumns[index].classList.add("wrong")
+      $(`#${letter}`).addClass("wrong")
     } else {
       if (letrecoLocal[index] === letter) {
         currentColumns[index].classList.add("right")
+        $(`#${letter}`).addClass("right")
       } else {
         currentColumns[index].classList.add("displaced")
+        $(`#${letter}`).addClass("displaced")
       }
     }
   }
@@ -57,6 +76,26 @@ const checkGuess = () => {
     if (currentRow === rows - 1) {
       window.location.reload()
     } else {
+      switch (currentRow) {
+        case 0:
+          $("#tips-list").append(`<li class="capitalize-text">${meanings[0].partOfSpeech}</li>`)
+
+          break;
+        case 1:
+          $("#tips-list").append(`<li>Sinônimo: ${synonyms[0]}</li>`)
+
+          break;
+        case 2:
+          $("#tips-list").append(`<li>Frase: ${sentences[0].sentence.replace(new RegExp(letreco, "gi"), "?")}</li>`)
+
+          break;
+        case 3:
+          $("#tips-list").append(`<li>Significado: ${meanings[0].meanings[0]}</li>`)
+
+        default:
+          break;
+      }
+
       moveToNextRow()
     }
   }
@@ -119,20 +158,25 @@ const handleBackspace = () => {
 const backspaceButton = document.createElement("button");
 backspaceButton.addEventListener("click", handleBackspace);
 backspaceButton.textContent = "<";
+backspaceButton.classList.add("backspace-button")
 backspaceAndEnterRow.append(backspaceButton);
 
 const enterButton = document.createElement("button");
 enterButton.addEventListener("click", checkGuess);
 enterButton.textContent = "ENTER";
+enterButton.classList.add("enter-button")
 backspaceAndEnterRow.append(enterButton);
 
 document.onkeydown = function (evt) {
   evt = evt || window.evt
   if (evt.key === "Enter") {
-    checkGuess();
+    $.get(`https://significado.herokuapp.com/v2/${guesses[currentRow].join("")}`, function () {
+      checkGuess();
+    })
+
   } else if (evt.key === "Backspace") {
     handleBackspace()
-  } else {
+  } else if (/^[a-z]$/i.test(evt.key)) {
     handleKeyboardOnClick(evt.key.toUpperCase())
   }
 }
