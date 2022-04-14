@@ -8,43 +8,142 @@ const keysFirstRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
 const keysSecondRow = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
 const keysThirdRow = ["Z", "X", "C", "V", "B", "N", "M"];
 
-let letreco = "PEGAR";
-let sentences = [];
-let synonyms = [];
-let meanings = []
-$.get(`https://significado.herokuapp.com/v2/frases/${letreco}`, function (data) {
-  sentences = data;
-})
-$.get(`https://significado.herokuapp.com/v2/${letreco}`, function (data) {
-  meanings = data;
-})
-$.get(`https://significado.herokuapp.com/v2/sinonimos/${letreco}`, function (data) {
-  synonyms = data;
-})
-const rows = 6;
-const columns = letreco.length;
-$("#tips-list").append(`<li>A palavra tem <strong>${letreco.length} letras</strong></li>`)
+let letreco = "";
+let word = "";
 let currentRow = 0;
 let currentColumn = 0;
-const guesses = [];
+let tipAmount = 0;
+let columns = 0;
 const tips = [];
+const rows = 6;
+let guesses = [];
+let sentences = [];
+let synonyms = [];
+let meanings = [];
+let points = Number(localStorage.getItem('points')) || 0
+let words = []
+let usedWords = localStorage.getItem('usedWords').split(',') || []
+const time = 11000
+let timeInterval = (time / 1000)
+const funcSecond = () => {
+  timeInterval--
+  $('.time-mark').text(timeInterval)
+}
+const funcNextRow = () => {
+  if (tipAmount < 4) {
+    getTip(true)
+  } else { skipRow() }
+  timeInterval = (time / 1000) - 1
+  $('.time-mark').text(timeInterval)
+}
+let timerSecond 
+let timerNextRow
 
-for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
-  guesses[rowIndex] = new Array(columns);
-  const tileRow = document.createElement("div");
-  tileRow.setAttribute("id", "row" + rowIndex);
-  tileRow.setAttribute("class", "tile-row");
-  for (let columnIndex = 0; columnIndex < columns; columnIndex++) {
-    const tileColumn = document.createElement("div");
-    tileColumn.setAttribute("id", "row" + rowIndex + "column" + columnIndex);
-    tileColumn.setAttribute(
-      "class",
-      rowIndex === 0 ? "tile-column typing" : "tile-column disabled"
-    );
-    tileRow.append(tileColumn);
-    guesses[rowIndex][columnIndex] = "";
+$.get(`/palavras.json`, function (data) {
+  words = data
+  changeWord()
+})
+
+const changeWord = () => {
+  renewInterval()
+  $('#points').text(`pontos: ${points}`)
+  tipAmount = 0;
+  keysFirstRow.forEach(key => {
+    $(`#${key}`).removeClass("wrong")
+    $(`#${key}`).removeClass("right")
+    $(`#${key}`).removeClass("displaced")
+  })
+  keysSecondRow.forEach(key => {
+    $(`#${key}`).removeClass("wrong")
+    $(`#${key}`).removeClass("right")
+    $(`#${key}`).removeClass("displaced")
+  })
+  keysThirdRow.forEach(key => {
+    $(`#${key}`).removeClass("wrong")
+    $(`#${key}`).removeClass("right")
+    $(`#${key}`).removeClass("displaced")
+  })
+  currentRow = 0;
+  currentColumn = 0;
+  guesses = [];
+  word = words.filter(word => usedWords.indexOf(word) < 0)[Math.round(Math.random() * words.length)]
+  $("#tips-list").empty()
+  $(".tile-container").empty()
+  letreco = word.replace('ç', 'c')
+    .replace('á', 'a')
+    .replace('é', 'e')
+    .replace('í', 'i')
+    .replace('ó', 'o')
+    .replace('ã', 'a')
+    .replace('õ', 'e')
+    .replace('î', 'i')
+    .replace('ô', 'o')
+    .replace('â', 'a')
+    .replace('ê', 'e')
+  columns = letreco.length;
+
+  $.get(`https://significado.herokuapp.com/v2/frases/${letreco}`, function (data) {
+    sentences = data;
+  })
+  $.get(`https://significado.herokuapp.com/v2/${letreco}`, function (data) {
+    meanings = data;
+  })
+  $.get(`https://significado.herokuapp.com/v2/sinonimos/${letreco}`, function (data) {
+    synonyms = data;
+  })
+  $("#tips-list").append(`<li>A palavra tem <strong>${letreco.length} letras</strong></li>`)
+
+  for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
+    guesses[rowIndex] = new Array(columns);
+    const tileRow = document.createElement("div");
+    tileRow.setAttribute("id", "row" + rowIndex);
+    tileRow.setAttribute("class", "tile-row");
+    for (let columnIndex = 0; columnIndex < columns; columnIndex++) {
+      const tileColumn = document.createElement("div");
+      tileColumn.setAttribute("id", "row" + rowIndex + "column" + columnIndex);
+      tileColumn.setAttribute(
+        "class",
+        rowIndex === 0 ? "tile-column typing" : "tile-column disabled"
+      );
+      tileRow.append(tileColumn);
+      guesses[rowIndex][columnIndex] = "";
+    }
+    tiles.append(tileRow);
   }
-  tiles.append(tileRow);
+}
+
+const skipRow = () => {
+  let currentColumns = document.querySelectorAll(".typing");
+  for (let i = 0; i < currentColumns.length; i++) {
+    currentColumns[i].classList.add("skipped")
+  }
+  moveToNextRow()
+}
+
+const getTip = (skip) => {
+  if (tipAmount < 4) {
+
+    if (skip) skipRow()
+    switch (tipAmount) {
+      case 0:
+        $("#tips-list").append(`<li class="capitalize-text"><strong>${meanings[0].partOfSpeech}</strong></li>`)
+        tipAmount++
+        break;
+      case 1:
+        $("#tips-list").append(`<li><strong>Sinônimo</strong>: ${synonyms[0] || "Não identificado"}</li>`)
+        tipAmount++
+        break;
+      case 2:
+        $("#tips-list").append(`<li><strong>Frase</strong>: ${sentences[0].sentence.replace(new RegExp(word, "gi"), "<strong><i>LETREIRO</i></strong>")}</li>`)
+        tipAmount++
+        break;
+      case 3:
+        $("#tips-list").append(`<li><strong>Significado</strong>: ${meanings[0].meanings[0]}</li>`)
+        tipAmount++
+      default:
+        break;
+    }
+  }
 }
 
 const checkGuess = () => {
@@ -53,55 +152,55 @@ const checkGuess = () => {
     return;
   }
 
-
   let letrecoLocal = [...letreco]
   var currentColumns = document.querySelectorAll(".typing");
   for (let index = 0; index < columns; index++) {
-    const letter = guess[index];
+    const letter = guess[index].toLowerCase();
     if (letrecoLocal.indexOf(letter) < 0) {
       currentColumns[index].classList.add("wrong")
-      $(`#${letter}`).addClass("wrong")
+      $(`#${letter.toUpperCase()}`).addClass("wrong")
     } else {
       if (letrecoLocal[index] === letter) {
         currentColumns[index].classList.add("right")
-        $(`#${letter}`).addClass("right")
+        $(`#${letter.toUpperCase()}`).addClass("right")
       } else {
         currentColumns[index].classList.add("displaced")
-        $(`#${letter}`).addClass("displaced")
+        $(`#${letter.toUpperCase()}`).addClass("displaced")
       }
     }
   }
 
-  if (guess !== letreco) {
+  if (guess.toLowerCase() !== letreco.toLowerCase()) {
     if (currentRow === rows - 1) {
       window.location.reload()
     } else {
-      switch (currentRow) {
-        case 0:
-          $("#tips-list").append(`<li class="capitalize-text"><strong>${meanings[0].partOfSpeech}</strong></li>`)
-
-          break;
-        case 1:
-          $("#tips-list").append(`<li><strong>Sinônimo</strong>: ${synonyms[0]}</li>`)
-
-          break;
-        case 2:
-          $("#tips-list").append(`<li><strong>Frase</strong>: ${sentences[0].sentence.replace(new RegExp(letreco, "gi"), "?")}</li>`)
-
-          break;
-        case 3:
-          $("#tips-list").append(`<li><strong>Significado</strong>: ${meanings[0].meanings[0]}</li>`)
-
-        default:
-          break;
-      }
-
+      getTip()
       moveToNextRow()
     }
+  } else {
+    points += (6 - currentRow) * 10
+
+    usedWords.push(word)
+    localStorage.setItem('usedWords', usedWords)
+    localStorage.setItem('points', points)
+    clearInterval(timerSecond)
+    clearInterval(timerNextRow)
+    setTimeout(() => {
+      changeWord()
+    }, 2000);
   }
 };
 
+const renewInterval = () => {
+  clearInterval(timerSecond)
+  clearInterval(timerNextRow)
+  timeInterval = (time / 1000)
+  timerSecond = setInterval(funcSecond, 1000);
+  timerNextRow = setInterval(funcNextRow, time);
+}
+
 const moveToNextRow = () => {
+  renewInterval()
   var typingColumns = document.querySelectorAll(".typing")
   for (let index = 0; index < typingColumns.length; index++) {
     typingColumns[index].classList.remove("typing")
@@ -177,6 +276,6 @@ document.onkeydown = function (evt) {
   } else if (evt.key === "Backspace") {
     handleBackspace()
   } else if (/^[a-z]$/i.test(evt.key)) {
-    handleKeyboardOnClick(evt.key.toUpperCase())
+    handleKeyboardOnClick(evt.key.toLowerCase())
   }
 }

@@ -37,7 +37,7 @@ img {
   width: 510px;
 }
 
-.title-container h1 {
+.title-container h1, h3 {
   font-family: star-jedi;
   color: #c79c2e;
 }
@@ -92,6 +92,11 @@ img {
   border: 1px solid #252525;
 }
 
+.skipped {
+  background-color: #514a4a;
+  color: #f4f3f1;
+}
+
 .wrong {
   background-color: #943e3c;
   color: #f4f3f1;
@@ -132,8 +137,29 @@ img {
   font-size: 15px;
  }
 
-.question-mark {
+ .time-mark {
   position: absolute;
+  left: 0;
+  top: 0;
+  margin-top: -20px;
+  margin-left: -15px;
+  background-color: #252525;
+  border: 3px solid #c79c2e;
+  text-align: center;
+  vertical-align: middle;
+  color: #c79c2e;
+  width: 45px;
+  height: 45px;
+  font-size: 25px;
+  font-family: star-jedi;
+  border-radius: 50%;
+}
+
+.question-mark {
+  cursor: pointer;
+  position: absolute;
+  text-align: center;
+  vertical-align: middle;
   right: 0;
   top: 0;
   margin-top: -20px;
@@ -142,6 +168,7 @@ img {
   border: 3px solid #c79c2e;
   color: #c79c2e;
   width: 45px;
+  height: 45px;
   font-size: 30px;
   font-family: star-jedi;
   border-radius: 50%;
