@@ -22,8 +22,8 @@ let synonyms = [];
 let meanings = [];
 let points = Number(localStorage.getItem('points')) || 0
 let words = []
-let usedWords = localStorage.getItem('usedWords').split(',') || []
-const time = 11000
+let usedWords = localStorage.getItem('usedWords')?.split(',') || []
+const time = 31000
 let timeInterval = (time / 1000)
 const funcSecond = () => {
   timeInterval--
@@ -66,7 +66,7 @@ const changeWord = () => {
   currentRow = 0;
   currentColumn = 0;
   guesses = [];
-  word = words.filter(word => usedWords.indexOf(word) < 0)[Math.round(Math.random() * words.length)]
+  word = words.filter(word => usedWords.indexOf(word) < 0).sort((a,b) => a.length - b.length)[0]
   $("#tips-list").empty()
   $(".tile-container").empty()
   letreco = word.replace('ç', 'c')
@@ -178,7 +178,7 @@ const checkGuess = () => {
       moveToNextRow()
     }
   } else {
-    points += (6 - currentRow) * 10
+    points += ((6 - currentRow)+ letreco.length) * 10
 
     usedWords.push(word)
     localStorage.setItem('usedWords', usedWords)
