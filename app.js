@@ -36,7 +36,7 @@ const funcNextRow = () => {
   timeInterval = (time / 1000) - 1
   $('.time-mark').text(timeInterval)
 }
-let timerSecond 
+let timerSecond
 let timerNextRow
 
 $.get(`/palavras.json`, function (data) {
@@ -66,7 +66,7 @@ const changeWord = () => {
   currentRow = 0;
   currentColumn = 0;
   guesses = [];
-  word = words.filter(word => usedWords.indexOf(word) < 0).sort((a,b) => a.length - b.length)[0]
+  word = words.filter(word => usedWords.indexOf(word) < 0).sort((a, b) => a.length - b.length)[0]
   $("#tips-list").empty()
   $(".tile-container").empty()
   letreco = word.replace('ç', 'c')
@@ -113,11 +113,15 @@ const changeWord = () => {
 }
 
 const skipRow = () => {
-  let currentColumns = document.querySelectorAll(".typing");
-  for (let i = 0; i < currentColumns.length; i++) {
-    currentColumns[i].classList.add("skipped")
-  }
-  moveToNextRow()
+  if (currentRow < rows - 1) {
+
+    let currentColumns = document.querySelectorAll(".typing");
+    for (let i = 0; i < currentColumns.length; i++) {
+      currentColumns[i].classList.add("skipped")
+    }
+    moveToNextRow()
+  } else
+    changeWord()
 }
 
 const getTip = (skip) => {
@@ -178,7 +182,7 @@ const checkGuess = () => {
       moveToNextRow()
     }
   } else {
-    points += ((6 - currentRow)+ letreco.length) * 10
+    points += ((6 - currentRow) + letreco.length) * 10
 
     usedWords.push(word)
     localStorage.setItem('usedWords', usedWords)
