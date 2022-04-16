@@ -1,0 +1,17 @@
+{
+  "name": "Letreiro",
+  "short_name": "Letreiro",
+  "description": "Acerte as palavras para pontuar",
+  "scope": "/letreco/",
+  "start_url": "/letreco/",
+  "background_color": "#413e3e",
+  "theme_color": "#413e3e",
+  "display": "fullscreen", 
+  "icons": [
+      {
+        "src": "/letreco/logo.png",
+        "type": "image/png",
+        "sizes": "700x700"
+      }
+  ]
+}
