@@ -271,7 +271,7 @@ h3 {
   font-size: 20px;
   cursor: pointer;
 }
-@media screen and (max-width: 700px) {
+@media only screen and (max-width: 450px) {
   .keyboard-row-container:not(.notAlphabetic) button {
     width: 33px;
     height: 33px;
@@ -279,11 +279,19 @@ h3 {
   }
 }
 
-@media screen and (max-width: 650px) {
+@media only screen and (max-width: 400px) {
   .keyboard-row-container:not(.notAlphabetic) button {
     width: 30px;
     height: 30px;
     font-size: 16px;
+  }
+}
+
+@media only screen and (max-width: 350px) {
+  .keyboard-row-container:not(.notAlphabetic) button {
+    width: 27px;
+    height: 27px;
+    font-size: 15px;
   }
 }
 
