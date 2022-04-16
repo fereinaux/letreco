@@ -8,6 +8,11 @@
   src: url("./Roboto-Regular.ttf");
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 body {
   font-family: roboto;
   background-color: #252525;
@@ -56,7 +61,6 @@ img {
 
 @-webkit-keyframes scoreAnimation {
   0% {
-
     bottom: -10%;
     opacity: 1;
   }
@@ -257,14 +261,22 @@ h3 {
   width: 80px;
 }
 
+
 .keyboard-row-container:not(.notAlphabetic) button {
   width: 40px;
   height: 40px;
   border-radius: 0.25rem;
   margin-right: 0.25rem;
-
+  
   font-size: 20px;
   cursor: pointer;
+}
+@media screen and (max-width: 700px) {
+  .keyboard-row-container:not(.notAlphabetic) button {
+    width: 33px;
+    height: 33px;
+    font-size: 16px;
+  }
 }
 
 button {

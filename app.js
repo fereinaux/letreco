@@ -272,7 +272,7 @@ const checkGuess = () => {
     points += gainedPoints
     $('.point-gained').text(`+${gainedPoints}`)
     $('.score-overflow').addClass('action')
-    let left = Math.floor(Math.random() * (95 - 5 + 1) + 5);
+    let left = Math.floor(Math.random() * (87 - 13 + 1) + 13);
     console.log(left);
     $('.score-overflow').css('left',`${left}%`)
     usedWords.push(word)
