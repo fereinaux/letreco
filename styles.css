@@ -12,6 +12,8 @@ body {
   font-family: roboto;
   background-color: #252525;
   color: #c0bfbf;
+  width: 500px;
+  max-width: 100%;
 }
 
 body::-webkit-scrollbar {
@@ -34,7 +36,7 @@ img {
 
 .title-container {
   text-align: center;
-  width: 510px;
+  max-width: 100%;
 }
 
 .title-container h1, h3 {
@@ -54,7 +56,8 @@ img {
 }
 
 .app-container {
-  max-width: 500px;
+  width: 500px;
+  max-width: 100%;
   margin-left: auto;
   margin-right: auto;
   display: flex;
