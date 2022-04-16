@@ -194,7 +194,9 @@ const changeWord = () => {
     tiles.append(tileRow);
   }
 }
-$( document ).ready(changeWord);
+$(document).ready(() => {
+  changeWord()
+});
 
 const skipRow = () => {
   if (currentRow < rows - 1) {
@@ -266,8 +268,13 @@ const checkGuess = () => {
       moveToNextRow()
     }
   } else {
-    points += ((6 - currentRow) + letreco.length) * 10
-
+    let gainedPoints = ((6 - currentRow) + letreco.length) * 10
+    points += gainedPoints
+    $('.point-gained').text(`+${gainedPoints}`)
+    $('.score-overflow').addClass('action')
+    let left = Math.floor(Math.random() * (95 - 5 + 1) + 5);
+    console.log(left);
+    $('.score-overflow').css('left',`${left}%`)
     usedWords.push(word)
     localStorage.setItem('usedWords', usedWords)
     localStorage.setItem('points', points)
@@ -275,6 +282,7 @@ const checkGuess = () => {
     clearInterval(timerNextRow)
     setTimeout(() => {
       changeWord()
+      $('.score-overflow').removeClass('action')
     }, 2000);
   }
 };
