@@ -9,7 +9,7 @@
   "display": "fullscreen", 
   "icons": [
       {
-        "src": "/letreco/logo.png",
+        "src": "/letreco/512x512.png",
         "type": "image/png",
         "sizes": "700x700"
       }
