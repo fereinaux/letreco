@@ -124,7 +124,7 @@ words = [
   "tempo"
 ]
 
-changeWord()
+
 
 
 const changeWord = () => {
@@ -194,6 +194,7 @@ const changeWord = () => {
     tiles.append(tileRow);
   }
 }
+$( document ).ready(changeWord);
 
 const skipRow = () => {
   if (currentRow < rows - 1) {
