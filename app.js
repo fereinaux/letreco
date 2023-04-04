@@ -165,13 +165,13 @@ const changeWord = () => {
     .replace('ê', 'e')
   columns = letreco.length;
 
-  $.get(`https://significado.herokuapp.com/v2/frases/${letreco}`, function (data) {
+  $.get(`https://dicio-api-ten.vercel.app/v2/frases/${letreco}`, function (data) {
     sentences = data;
   })
-  $.get(`https://significado.herokuapp.com/v2/${letreco}`, function (data) {
+  $.get(`https://dicio-api-ten.vercel.app/v2/${letreco}`, function (data) {
     meanings = data;
   })
-  $.get(`https://significado.herokuapp.com/v2/sinonimos/${letreco}`, function (data) {
+  $.get(`https://dicio-api-ten.vercel.app/v2/sinonimos/${letreco}`, function (data) {
     synonyms = data;
   })
   $("#tips-list").append(`<li>A palavra tem <strong>${letreco.length} letras</strong></li>`)
@@ -274,7 +274,7 @@ const checkGuess = () => {
     $('.score-overflow').addClass('action')
     let left = Math.floor(Math.random() * (87 - 13 + 1) + 13);
     console.log(left);
-    $('.score-overflow').css('left',`${left}%`)
+    $('.score-overflow').css('left', `${left}%`)
     usedWords.push(word)
     localStorage.setItem('usedWords', usedWords)
     localStorage.setItem('points', points)
@@ -365,7 +365,7 @@ backspaceAndEnterRow.append(enterButton);
 document.onkeydown = function (evt) {
   evt = evt || window.evt
   if (evt.key === "Enter") {
-    $.get(`https://significado.herokuapp.com/v2/${guesses[currentRow].join("").toLowerCase()}`, function () {
+    $.get(`https://dicio-api-ten.vercel.app/v2/${guesses[currentRow].join("").toLowerCase()}`, function () {
       checkGuess();
     })
 
